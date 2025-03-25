@@ -26,9 +26,9 @@ public record DepartmentDto(
   }
 
   private static String formatInstantToLocalDate(Instant instant) {
-      if (instant == null) {
-          return null;
-      }
+    if (instant == null) {
+      return null;
+    }
     return instant.atZone(ZoneOffset.UTC).toLocalDate().toString();
   }
 }

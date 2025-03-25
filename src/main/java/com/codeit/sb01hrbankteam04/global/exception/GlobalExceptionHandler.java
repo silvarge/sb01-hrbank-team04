@@ -1,10 +1,12 @@
 package com.codeit.sb01hrbankteam04.global.exception;
 
 import com.codeit.sb01hrbankteam04.global.response.CustomApiResponse;
+import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 /**
@@ -22,8 +24,12 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(value = {NoHandlerFoundException.class,
       HttpRequestMethodNotSupportedException.class})
-  public CustomApiResponse<?> handleNoPageFoundException(Exception e) {
-    log.error("GlobalExceptionHandler catch NoHandlerFoundException : {}", e.getMessage());
+  public CustomApiResponse<?> handleNoPageFoundException(Exception e, WebRequest request) {
+    log.error("NoHandlerFoundException 발생 시각: {}, 요청 정보: {}, 예외: {}",
+        LocalDateTime.now(),
+        request.getDescription(false),
+        e.getMessage(),
+        e); // 마지막 ex가 StackTrace까지 함께 로깅
     return CustomApiResponse.fail(new CustomException(ErrorCode.INTERNAL_SERVER_ERROR));
   }
 
@@ -34,9 +40,12 @@ public class GlobalExceptionHandler {
    * @return 해당 Error 코드에 대응하는 에러 응답
    */
   @ExceptionHandler(value = {CustomException.class})
-  public CustomApiResponse<?> handleCustomException(CustomException e) {
-    log.error("handleCustomException() in GlobalExceptionHandler throw CustomException : {}",
-        e.getMessage());
+  public CustomApiResponse<?> handleCustomException(CustomException e, WebRequest request) {
+    log.error("CustomException 발생 시각: {}, 요청 정보: {}, 예외: {}",
+        LocalDateTime.now(),
+        request.getDescription(false),
+        e.getMessage(),
+        e);
     return CustomApiResponse.fail(e);
   }
 
@@ -47,9 +56,12 @@ public class GlobalExceptionHandler {
    * @return 500 INTERNAL SERVER ERROR 응답
    */
   @ExceptionHandler(value = {Exception.class})
-  public CustomApiResponse<?> handleException(Exception e) {
-    log.error("handleCustomException() in GlobalExceptionHandler throw Exception : {}",
-        e.getMessage());
+  public CustomApiResponse<?> handleException(Exception e, WebRequest request) {
+    log.error("Exception 발생 시각: {}, 요청 정보: {}, 예외: {}",
+        LocalDateTime.now(),
+        request.getDescription(false),
+        e.getMessage(),
+        e);
     return CustomApiResponse.fail(new CustomException(ErrorCode.INTERNAL_SERVER_ERROR));
   }
 

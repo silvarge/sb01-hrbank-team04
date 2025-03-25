@@ -55,8 +55,8 @@ public class DepartmentService {
 
   @Transactional(readOnly = true)
   public CursorPageResponseDepartmentDto getDepartments(
-          String nameOrDescription, Long idAfter, String cursor, int size, String sortField,
-          String sortDirection) {
+      String nameOrDescription, Long idAfter, String cursor, int size, String sortField,
+      String sortDirection) {
 
     // 커서가 있을 때만 디코딩해서 idAfter로 사용
     Long actualIdAfter = (cursor != null && !cursor.isEmpty()) ? decodeCursor(cursor) : idAfter;
@@ -70,12 +70,12 @@ public class DepartmentService {
 
     // Repository
     List<Department> departments = departmentRepository.findDepartmentsByCursor(
-            nameOrDescription, actualIdAfter, pageable);
+        nameOrDescription, actualIdAfter, pageable);
 
     // DTO 변환
     List<DepartmentDto> departmentDtos = departments.stream()
-            .map(DepartmentDto::fromEntity)
-            .collect(Collectors.toList());
+        .map(DepartmentDto::fromEntity)
+        .collect(Collectors.toList());
 
     // 전체 수
     Long totalElements = departmentRepository.count();
@@ -88,7 +88,7 @@ public class DepartmentService {
     }
 
     return CursorPageResponseDepartmentDto.from(
-            departmentDtos, nextCursor, lastId, size, totalElements, hasNextPage(departments, size));
+        departmentDtos, nextCursor, lastId, size, totalElements, hasNextPage(departments, size));
   }
 
   private boolean hasNextPage(List<Department> departments, int size) {
@@ -103,7 +103,7 @@ public class DepartmentService {
    */
   private String encodeCursor(Long id) {
     return Base64.getEncoder()
-            .encodeToString(("{\"id\": " + id + "}").getBytes(StandardCharsets.UTF_8));
+        .encodeToString(("{\"id\": " + id + "}").getBytes(StandardCharsets.UTF_8));
   }
 
   /**

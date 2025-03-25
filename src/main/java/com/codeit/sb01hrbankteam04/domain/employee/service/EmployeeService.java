@@ -21,7 +21,6 @@ import com.codeit.sb01hrbankteam04.domain.file.repository.FileRepository;
 import com.codeit.sb01hrbankteam04.domain.file.service.FileService;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -29,13 +28,11 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import javax.management.InstanceAlreadyExistsException;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -74,14 +71,14 @@ public class EmployeeService {
 
     //파일 저장
     FileDto fileDto = null;
-    File nullableProfile =null;
-    
+    File nullableProfile = null;
+
     //파일이 있을 때 파일 create 및 파일 설정
-    if(optionalProfileRequest != null) {
+    if (optionalProfileRequest != null) {
       fileDto = fileService.create(optionalProfileRequest, FileType.PROFILE);
       nullableProfile = fileRepository.findById(fileDto.id()).orElse(null);
     }
-    
+
     Employee employee = Employee.builder()
         .status(EmployeeStatusType.ACTIVE)
         .name(employeeCreateRequest.name())
@@ -152,43 +149,41 @@ public class EmployeeService {
         .map(employeeMapper::toDto)
         .collect(Collectors.toList());
 
-
     //Long totalElements = 1L;
     Long totalElements = employeeRepository.countPageTotalCount(
         nameOrEmail, employeeNumber, departmentName, position,
-        hireDateFrom, hireDateTo, status );
+        hireDateFrom, hireDateTo, status);
 
     //현재 페이지의 목록 크기
     int pageSize = employees.size();
 
     //nextIdAfter, 현 employees의 마지막 직원의 id
     Long lastId = null;
-    if(size - pageSize > 0){
+    if (size - pageSize > 0) {
       //null 맞음
+    } else if (size - pageSize == 0) {
+      lastId = totalElements == size ? null : employees.get(employees.size() - 1).getId();
     }
-    else if(size - pageSize==0){
-      lastId = totalElements ==size ? null :employees.get(employees.size() - 1).getId();
-    }
-    
+
     //넥스트커서로, 분류기준에 따라 값을 가져야함.
-    String nextCursor = lastId != null ? convertCursor(sortBy, employees.get(employees.size() - 1) ) : null;
+    String nextCursor =
+        lastId != null ? convertCursor(sortBy, employees.get(employees.size() - 1)) : null;
     boolean hasNext = employees.size() == size;
 
-
-
-    return  EmployeePageResponse.from(
+    return EmployeePageResponse.from(
         EmployeeResponses, nextCursor, lastId, pageSize, totalElements, hasNext);
   }
 
   // 커서의 값을 반환한다.
   private String convertCursor(String sortBy, Employee employee) {
-    if(sortBy.equals("name")){
+    if (sortBy.equals("name")) {
       return employee.getName();
+    } else if (sortBy.equals("hireDate")) {
+      return DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.systemDefault())
+          .format(employee.getJoinedAt());
+    } else {
+      return employee.getCode();
     }
-    else if(sortBy.equals("hireDate")){
-      return DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.systemDefault()).format(employee.getJoinedAt());
-    }
-    else return  employee.getCode();
   }
 
   /**

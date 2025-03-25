@@ -18,3 +18,4 @@ logging:
     org:
       hibernate:
         sql: info  # 운영 환경에서는 SQL 로그를 info로 설정
+    root: info

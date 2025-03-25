@@ -352,8 +352,9 @@ public class EmployeeChangeLogRepository {
         isDelete ? null : employee.getCode()));
     diffs.add(new DiffDto("email", isDelete ? employee.getEmail() : null,
         isDelete ? null : employee.getEmail()));
-    diffs.add(new DiffDto("hireDate", isDelete ? convertInstantToLocalDate(employee.getJoinedAt()): null,
-        isDelete ? null : convertInstantToLocalDate(employee.getJoinedAt())));
+    diffs.add(
+        new DiffDto("hireDate", isDelete ? convertInstantToLocalDate(employee.getJoinedAt()) : null,
+            isDelete ? null : convertInstantToLocalDate(employee.getJoinedAt())));
     diffs.add(new DiffDto("position", isDelete ? employee.getPosition() : null,
         isDelete ? null : employee.getPosition()));
     diffs.add(new DiffDto("department", isDelete ? employee.getDepartment().getName() : null,

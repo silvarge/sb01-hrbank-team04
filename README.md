@@ -32,12 +32,12 @@
 
 ### 🌿 백엔드
 
-| 이름      | GitHub                                             | 이메일                                    |
-|---------|----------------------------------------------------|----------------------------------------|
+| 이름      | GitHub                                             | 이메일                    |
+|---------|----------------------------------------------------|------------------------|
 | **김준우** | [@normaldeve](https://github.com/normaldeve)       | junnukim1007@gmail.com |
 | **김효정** | [@hyojkim2](https://github.com/hyojkim2)           | skql2548@gmaiil.com    |
-| **안대민** | [@dkseoals15](https://github.com/dkseoals15)       | aa88491231@gmail.com  |
-| **한상은** | [@silvarge](https://github.com/silvarge)           | sep.non2@gmail.com   |
+| **안대민** | [@dkseoals15](https://github.com/dkseoals15)       | aa88491231@gmail.com   |
+| **한상은** | [@silvarge](https://github.com/silvarge)           | sep.non2@gmail.com     |
 | **양병운** | [@Yang-ByeongUn](https://github.com/Yang-ByeongUn) | ypd06426@naver.com     |
 
 ---
